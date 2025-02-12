@@ -55,7 +55,7 @@ source ~/.bashrc
 To test the algorithms on the robot, first configure the TCP/IP parameters for both the robot and your computer
 
 Execute the following steps in different terminals:
-**DIL Training**
+**DAgger training (DA-DNN)**
 1. **Launch Robot Drivers:**
    ```bash
    roslaunch ur_modern_driver ur5_bringup.launch robot_ip:=192.168.1.2
@@ -72,6 +72,8 @@ Execute the following steps in different terminals:
    ```bash
    rosrun mpc_low mpc_low_node
    ```
+To select a direction in the **high_solver.cpp** file located on the mpc_high page, specify the row index, it can be 0 (AtoB) or 1(BtoA).
+
 5. **Run High level Controller:**
    ```bash
    rosrun mpc_high mpc_high_node
@@ -81,59 +83,27 @@ Execute the following steps in different terminals:
    source ./venv/bin/activate
    cd workspaces/ur5_dagger/src/dil_train
    ```
-7.1. **Running Models Without Encoder (O-DNN, ODA-DNN, DA-DNN)**
-
-To run models without an encoder, follow these steps:
-Open the file dagger_train.py located in the dil_train directory.
-Specify the following parameters in the script:
-**Direction:**
-```python
-direction = 'AB/'  # or 'BA/'
-```
-**Controller:**
-```python
-controller = 'O-DNN/'  # or 'ODA-DNN' or 'DA-DNN'
-```
-
-**Safety Mode:**
-```python
-safety = 'NotSafe/'  # or 'Safe/'
-```
-
-Run the script using the command:
+7. **Run the script using the command:**
    ```bash
    ./dagger_train.py 
    ```
-**E-dagger Training**
-1. **Launch Robot Drivers:**
+In order to train O-DNN, and ODA-DNN you need first collect dataset by running MPC controller. If you have dataset, you can run script on your venv:
    ```bash
-   roslaunch ur_modern_driver ur5_bringup.launch robot_ip:=192.168.1.2
+   ./dnn_train.py 
    ```
-2. **Test Human Movement Simulation:**
+
+**E-DAgger (E-DA-DNN) training is similar to DAgger training except step 7**
+7. **Run the script using the command:**
    ```bash
-   rosrun human_vrep train_human.py
+   ./e_dagger_train.py 
    ```
-3. **Send Human Movement Data to Controller:**
+In order to train O-E-DNN, and ODA-E-DNN you can use the same dataset that you used for O-DNN and ODA-DNN:
    ```bash
-   rosrun human_vrep human_sim
-   ```
-4. **Run Low-Level Controller:**
-   ```bash
-   rosrun mpc_low mpc_low_node
-   ```
-5. **Run High level Controller:**
-   ```bash
-   rosrun mpc_high mpc_high_node
-   ```
-6. **Activate your virtual environment, Navigate to the workspace and run the training script::**
-   ```bash
-   source ./venv/bin/activate
-   cd workspaces/ur5_dagger/src/dil_train
-   python ./e_dagger_train.py
+   ./e_dnn_train.py 
    ```
 
 ## Testing the Algorithms
-**E-dagger Testing**
+**Testing the Models With Encoder (O-E-DNN, ODA-E-DNN, DA-E-DNN, O-SE-DNN, ODA-SE-DNN, DA-SE-DNN)**
 1. **Launch Robot Drivers:**
    ```bash
    roslaunch ur_modern_driver ur5_bringup.launch robot_ip:=192.168.1.2
@@ -148,13 +118,53 @@ Run the script using the command:
    cd /ur5_dagger/src/dil_train
    ./control.py
    ```
+Open the file **e_dagger_test.py** located in the 'dil_train' directory.
+Specify the following parameters in the script:
+
+**Direction:**
+```python
+direction = 'AB/'  # or 'BA/'
+```
+**Controller:**
+```python
+controller = 'E-O-DNN/'  # or 'E-ODA-DNN' or 'E-DA-DNN'
+```
+**Safety Mode:**
+```python
+safety = 'NotSafe/'  # or 'Safe/'
+```
+
 4. **Activate your virtual environment and run the script::**
    ```bash
    source ./venv/bin/activate
    python ./e_dagger_test.py
    ```
 
-## Testing the Algorithms
+**Testing the Models Without Encoder (O-DNN, ODA-DNN, DA-DNN, O-S-DNN, ODA-S-DNN, DA-S-DNN)**
+Repeat steps 1-3
+
+Open the file **dagger_test.py** located in the 'dil_train' directory.
+Specify the following parameters in the script:
+
+**Direction:**
+```python
+direction = 'AB/'  # or 'BA/'
+```
+**Controller:**
+```python
+controller = 'O-DNN/'  # or 'ODA-DNN' or 'DA-DNN'
+```
+**Safety Mode:**
+```python
+safety = 'NotSafe/'  # or 'Safe/'
+```
+
+4. **Activate your virtual environment and run the script::**
+   ```bash
+   source ./venv/bin/activate
+   python ./dagger_test.py
+   ```
+   
 **MPC Testing**
 1. **Launch Robot Drivers:**
    ```bash
@@ -176,11 +186,20 @@ Run the script using the command:
    ```bash
    rosrun mpc_high mpc_high_node
    ```
+
+Open the file **one_way.py** located in the 'mpc_low' directory.
+Specify the following parameters in the script:
+
+**Direction:**
+```python
+direction = 'AB/'  # or 'BA/'
+```
+
 6. **Run the MPC one-way script:::**
    ```bash
    rosrun mpc_low one_way.py
    ```
-   
+
 ## Additional Resources
 The human dataset used for experiments, known as AnDyDataset, can be accessed [here](https://andydataset.loria.fr/).
 
