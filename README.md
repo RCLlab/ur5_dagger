@@ -4,7 +4,7 @@ This repository contains the source code for the experiments and results discuss
 
 **Authors**: Aigerim Nurbayeva and Matteo Rubagotti
 
-You can read the full paper here: [Link to Paper]([https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=10819386])
+You can read the full paper here: [Link to Paper](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=10819386)
 
 ## Download the workspace
 ```bash
