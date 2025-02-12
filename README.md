@@ -2,6 +2,10 @@
 
 This repository contains the source code for the experiments and results discussed in the paper titled "Safely Imitating Predictive Control Policies for Real-Time Human-Aware Manipulator Motion Planning: A Dataset Aggregation Approach". The code demonstrates the implementation of the algorithms described and provides tools to replicate our findings.
 
+**Authors**: Aigerim Nurbayeva and Matteo Rubagotti
+
+You can read the full paper here: [Link to Paper]([https://link-to-your-paper.com](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=10819386))
+
 ## Download the workspace
 ```bash
    git clone --recurse-submodules https://github.com/RCLlab/ur5_dagger
