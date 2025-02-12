@@ -76,13 +76,34 @@ Execute the following steps in different terminals:
    ```bash
    rosrun mpc_high mpc_high_node
    ```
-6. **Activate your virtual environment and Navigate to the workspace and run the training script::**
+6. **Activate your virtual environment and navigate to the workspace::**
    ```bash
    source ./venv/bin/activate
    cd workspaces/ur5_dagger/src/dil_train
-   ./action_send.py
    ```
+7.1. **Running Models Without Encoder (O-DNN, ODA-DNN, DA-DNN)**
 
+To run models without an encoder, follow these steps:
+Open the file dagger_train.py located in the dil_train directory.
+Specify the following parameters in the script:
+**Direction:**
+```python
+direction = 'AB/'  # or 'BA/'
+```
+**Controller:**
+```python
+controller = 'O-DNN/'  # or 'ODA-DNN' or 'DA-DNN'
+```
+
+**Safety Mode:**
+```python
+safety = 'NotSafe/'  # or 'Safe/'
+```
+
+Run the script using the command:
+   ```bash
+   ./dagger_train.py 
+   ```
 **E-dagger Training**
 1. **Launch Robot Drivers:**
    ```bash
