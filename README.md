@@ -8,7 +8,7 @@ You can read the full paper here: [Link to Paper](https://ieeexplore.ieee.org/st
 
 ## Download the workspace
 ```bash
-   git clone --recurse-submodules https://github.com/RCLlab/ur5_dagger
+git clone --recurse-submodules https://github.com/RCLlab/ur5_dagger
    ```
 Build the ROS environment with the following command:
 ```bash
