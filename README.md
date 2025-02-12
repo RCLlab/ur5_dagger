@@ -93,6 +93,7 @@ In order to train O-DNN, and ODA-DNN you need first collect dataset by running M
    ```
 
 **E-DAgger (E-DA-DNN) training is similar to DAgger training except step 7**
+
 7. **Run the script using the command:**
    ```bash
    ./e_dagger_train.py 
@@ -104,6 +105,7 @@ In order to train O-E-DNN, and ODA-E-DNN you can use the same dataset that you u
 
 ## Testing the Algorithms
 **Testing the Models With Encoder (O-E-DNN, ODA-E-DNN, DA-E-DNN, O-SE-DNN, ODA-SE-DNN, DA-SE-DNN)**
+
 1. **Launch Robot Drivers:**
    ```bash
    roslaunch ur_modern_driver ur5_bringup.launch robot_ip:=192.168.1.2
@@ -118,6 +120,7 @@ In order to train O-E-DNN, and ODA-E-DNN you can use the same dataset that you u
    cd /ur5_dagger/src/dil_train
    ./control.py
    ```
+   
 Open the file **e_dagger_test.py** located in the 'dil_train' directory.
 Specify the following parameters in the script:
 
@@ -141,6 +144,7 @@ safety = 'NotSafe/'  # or 'Safe/'
    ```
 
 **Testing the Models Without Encoder (O-DNN, ODA-DNN, DA-DNN, O-S-DNN, ODA-S-DNN, DA-S-DNN)**
+
 Repeat steps 1-3
 
 Open the file **dagger_test.py** located in the 'dil_train' directory.
@@ -166,6 +170,7 @@ safety = 'NotSafe/'  # or 'Safe/'
    ```
    
 **MPC Testing**
+
 1. **Launch Robot Drivers:**
    ```bash
    roslaunch ur_modern_driver ur5_bringup.launch robot_ip:=192.168.1.2
