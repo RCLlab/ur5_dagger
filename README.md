@@ -1,276 +1,164 @@
-# UR5 Controllers with Acados
+## Safely Imitating Predictive Control Policies for Real-Time Human-Aware Manipulator Motion Planning: A Dataset Aggregation Approach
 
-## Installation and Setup
+This repository contains the source code for the experiments and results discussed in the paper titled "Safely Imitating Predictive Control Policies for Real-Time Human-Aware Manipulator Motion Planning: A Dataset Aggregation Approach". The code demonstrates the implementation of the algorithms described and provides tools to replicate our findings.
 
-### Step 1: Clone the Repository
+## Download the workspace
+```bash
+   git clone --recurse-submodules https://github.com/RCLlab/ur5_dagger
+   ```
+Build the ROS environment with the following command:
+```bash
+catkin_make -DPYTHON_EXECUTABLE=/usr/bin/python3
+```
 
-1. Clone the `catkin_simple` repository:
+## Dependencies
+To run the code, you need the following:
+- pandas
+- python3.8
+
+Install pandas using the following command:
+```bash
+pip install pandas
+```
+
+Create virtual environment using the following command:
+```bash
+python3.8 - m venv venv
+```
+
+Install packages inside of the virtual environment using the following commands:
+```bash
+pip install pytorch
+pip install numpy
+pip install scipy
+pip install pyyaml
+pip install rospkg
+```
+
+## Implementation and Testing Environment
+The algorithms are implemented and tested using ROS on Ubuntu 20.04 with the real robot. Additionally, before testing on the real robot, they were simulated using the URSim simulator 'ursim-5.9.4.10321232'. For installation instructions for URSim, please follow the guidelines available [here](https://www.universal-robots.com/download/?query=).
+
+
+Ensure the ROS environment is sourced correctly by adding the following lines to your `.bashrc` file:
+```bash
+gedit ~/.bashrc
+# Add the following line at the end of the file:
+# source /path/to/your/catkin_workspace/devel/setup.bash
+source ~/.bashrc
+```
+
+## Training the Algorithms
+To test the algorithms on the robot, first configure the TCP/IP parameters for both the robot and your computer
+
+Execute the following steps in different terminals:
+**DIL Training**
+1. **Launch Robot Drivers:**
    ```bash
-   git clone https://github.com/catkin/catkin_simple.git
-
-    Build the workspace:
-
-    catkin_make -DPYTHON_EXECUTABLE=/usr/bin/python3
-
-Step 2: Install Python Dependencies
-Install necessary Python packages:
-      pip install pandas
-
-Install Python 3.8.10 if not already installed.
-Set up a virtual environment (venv) and install additional packages:
-
-    pip install pytorch
-    pip install numpy
-    pip install scipy
-    pip install pyyaml
-    pip install rospkg
-
-BASHRC Configuration
-
-Open the ~/.bashrc file:
-
-    gedit ~/.bashrc
-Edit the PATH as necessary.
-
-Apply the changes:
-
-    source ~/.bashrc
-    
-Testing with Real Robot
-
-Robot IP Configuration:
-
-IP: 192.168.1.2
-
-Subnet Mask: 255.255.255.0
-
-Gateway: 192.168.1.1
-
-Computer IP Configuration:
-
-IP: 192.168.1.1
-
-Subnet Mask: 255.255.255.0
-
-Gateway: 192.168.1.1
-
-URSIM Installation
-
-Install URSIM version 5.9.4.10321232.
-
-
-DIL Training 
-
-Start URSIM:
-    ./start-ursim.sh
-
-    
-Launch UR5 bringup:
-
-
-   roslaunch ur_modern_driver ur5_bringup.launch robot_ip:=127.0.0.1
-   
-
-Run human simulation:
-
-
-   rosrun human_vrep human_sim
-
-
-Run human spheres:
-
-
-   rosrun human_vrep human_spheres.py
-   
-
-Run the low-level MPC node:
-
-
-   rosrun mpc_low move_low_node
-   
-
-Run the high-level MPC node:
-
-
-   rosrun mpc_high move_high_node
-   
-
-Activate your virtual environment:
-
-
-   source ./venv/bin/activate
-
-
-Navigate to the workspace and run the training script:
-
-
-   cd workspaces/ur5_dagger/src/dil_train
-   
-   ./action_send.py
-
-
-
-
-MPC Test
-
-Start URSIM:
-
-
-   ./start-ursim.sh
-
-
-Launch UR5 bringup:
-
-
-   roslaunch ur_modern_driver ur5_bringup.launch robot_ip:=127.0.0.1
-   
-
-Run human test script:
-
-
-   rosrun human_vrep test_human.py
-   
-
-Run human simulation:
-
-
-   rosrun human_vrep human_sim
-   
-
-Run the low-level MPC node:
-
-
-   rosrun mpc_low mpc_low_node
-   
-
-Run the high-level MPC node:
-
-
-   rosrun mpc_high mpc_high_node
-   
-
-Run the low-level MPC one-way script:
-
-
-    rosrun mpc_low one_way.py
-    
-
-
-Dagger Test 
-
-
-Start URSIM:
-
-
-   ./start-ursim.sh
-   
-
-Launch UR5 bringup:
-
-
-   roslaunch ur_modern_driver ur5_bringup.launch robot_ip:=127.0.0.1
-   
-
-Run human test script:
-
-
-   rosrun human_vrep test_human
-   
-
-Run human spheres:
-
-
-   rosrun human_vrep human_spheres.py
-   
-
-Run the low-level MPC node:
-
-
-   rosrun mpc_low move_low_node
-   
-
-Run the high-level MPC node:
-
-
-   rosrun mpc_high move_high_node
-   
-
-Run the low-level MPC one-way script:
-
-
-    rosrun mpc_low_node one_way.py
-
-    
-
-E-Dagger Training (05.06.23)
-
-
-Open the URSIM UR5 app.
-
-Launch UR5 bringup:
-
-
-   roslaunch ur_modern_driver ur5_bringup.launch robot_ip:=127.0.0.1
-   
-
-Run human training script:
-
-
+   roslaunch ur_modern_driver ur5_bringup.launch robot_ip:=192.168.1.2
+   ```
+2. **Test Human Movement Simulation:**
+   ```bash
    rosrun human_vrep train_human.py
-   
-
-Run human simulation:
-
-
+   ```
+3. **Send Human Movement Data to Controller:**
+   ```bash
    rosrun human_vrep human_sim
-   
-
-Run the low-level MPC node:
-
-
+   ```
+4. **Run Low-Level Controller:**
+   ```bash
    rosrun mpc_low mpc_low_node
-   
-
-Run the high-level MPC node:
-
-
+   ```
+5. **Run High level Controller:**
+   ```bash
    rosrun mpc_high mpc_high_node
-   
-
-Activate your DNN environment:
-
-
-   source ./DDNV/bin/activate
-   
-
-Navigate to the workspace and run the E-Dagger training script:
-
-
-    cd workspaces/ur5_dagger/src/dil_train
-    
-    python ./e_dagger_train.py
-
-
-E-Dagger Test
-
-
-Navigate to the workspace:
-
-
+   ```
+6. **Activate your virtual environment and Navigate to the workspace and run the training script::**
+   ```bash
+   source ./venv/bin/activate
    cd workspaces/ur5_dagger/src/dil_train
-   
+   ./action_send.py
+   ```
 
-Run human test script:
+**E-dagger Training**
+1. **Launch Robot Drivers:**
+   ```bash
+   roslaunch ur_modern_driver ur5_bringup.launch robot_ip:=192.168.1.2
+   ```
+2. **Test Human Movement Simulation:**
+   ```bash
+   rosrun human_vrep train_human.py
+   ```
+3. **Send Human Movement Data to Controller:**
+   ```bash
+   rosrun human_vrep human_sim
+   ```
+4. **Run Low-Level Controller:**
+   ```bash
+   rosrun mpc_low mpc_low_node
+   ```
+5. **Run High level Controller:**
+   ```bash
+   rosrun mpc_high mpc_high_node
+   ```
+6. **Activate your virtual environment, Navigate to the workspace and run the training script::**
+   ```bash
+   source ./venv/bin/activate
+   cd workspaces/ur5_dagger/src/dil_train
+   python ./e_dagger_train.py
+   ```
 
-
+## Testing the Algorithms
+**E-dagger Testing**
+1. **Launch Robot Drivers:**
+   ```bash
+   roslaunch ur_modern_driver ur5_bringup.launch robot_ip:=192.168.1.2
+   ```
+2. **Test Human Movement Simulation:**
+   ```bash
+   cd /ur5_dagger/src/dil_train
    ./test_human.py
-   
-
-Run the control script:
-
-
+   ```
+3. **Send Human Movement Data to Controller:**
+   ```bash
+   cd /ur5_dagger/src/dil_train
    ./control.py
+   ```
+4. **Activate your virtual environment and run the script::**
+   ```bash
+   source ./venv/bin/activate
+   python ./e_dagger_test.py
+   ```
 
-Run the E-Dagger test script:
+## Testing the Algorithms
+**MPC Testing**
+1. **Launch Robot Drivers:**
+   ```bash
+   roslaunch ur_modern_driver ur5_bringup.launch robot_ip:=192.168.1.2
+   ```
+2. **Test Human Movement Simulation:**
+   ```bash
+   rosrun human_vrep test_human.py
+   ```
+3. **Send Human Movement Data to Controller:**
+   ```bash
+   rosrun human_vrep human_sim
+   ```
+4. **Run Low-Level Controller:**
+   ```bash
+   rosrun mpc_low mpc_low_node
+   ```
+5. **Run High level Controller:**
+   ```bash
+   rosrun mpc_high mpc_high_node
+   ```
+6. **Run the MPC one-way script:::**
+   ```bash
+   rosrun mpc_low one_way.py
+   ```
+   
+## Additional Resources
+The human dataset used for experiments, known as AnDyDataset, can be accessed [here](https://andydataset.loria.fr/).
 
-   ./e_dagger_test.py
+## Contact
+For questions and feedback, please reach out to Aigerim Nurbayeva at aigerim.nurbayeva@nu.edu.kz
+```
